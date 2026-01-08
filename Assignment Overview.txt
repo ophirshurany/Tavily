@@ -1,0 +1,43 @@
+Assignment Overview
+The document outlines a home assignment for Tavily, whose goal is to provide agents with relevant web information quickly. The system is designed to balance three specific trade-offs: latency, accuracy, and cost.
+
+Task Description
+The objective is to explore different web content summarization strategies while considering the three measurements mentioned above. You are required to develop two distinct strategies:
+
+
+Fast: Characterized by low latency and moderate quality.
+
+
+Advanced: Characterized by moderate latency and high quality.
+
+A dataset consisting of 1,000 URLs, their content, and baseline summaries is provided for this task.
+
+Deliverables
+The assignment requires two main components:
+
+GitHub Repository (or Notebooks):
+
+Implementation of the summarization strategies.
+
+A benchmark comparison of the approaches using relevant metrics.
+
+One-Pager PDF:
+
+An outline of the research and experimentation process.
+
+Descriptions of the attempted approaches.
+
+A highlight of faced challenges or limitations.
+
+Requirements & Evaluation
+
+Multilingual Support: All approaches must be multilingual.
+
+
+Length Constraint: Summaries must not exceed 1,500 characters.
+
+
+Timeline: The due date is one week from the assignment start.
+
+
+Evaluation Criteria: Performance of the algorithms, justification of chosen metrics, and the feasibility of the solution in a production environment handling millions of daily requests
