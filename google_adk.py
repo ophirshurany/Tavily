@@ -50,6 +50,12 @@ class LlmAgent:
             # Parse the JSON response into the Pydantic model
             import json
             data = json.loads(response.text)
+            
+            # Inject usage metadata if available
+            if response.usage_metadata:
+                data["tokens_input"] = response.usage_metadata.prompt_token_count
+                data["tokens_output"] = response.usage_metadata.candidates_token_count
+                
             return self.output_type(**data)
             
         except Exception as e:
@@ -75,6 +81,12 @@ class LlmAgent:
                 # Parse the JSON response into the Pydantic model
                 import json
                 data = json.loads(response.text)
+                
+                # Inject usage metadata if available
+                if response.usage_metadata:
+                    data["tokens_input"] = response.usage_metadata.prompt_token_count
+                    data["tokens_output"] = response.usage_metadata.candidates_token_count
+                    
                 return self.output_type(**data)
                 
             except Exception as e:

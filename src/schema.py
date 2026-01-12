@@ -20,6 +20,8 @@ class SummaryOutput(BaseModel):
     strategy: Literal["fast", "advanced"] = Field(..., description="The strategy used for generation")
     char_count: int = Field(..., description="The length of the summary content")
     latency_ms: float = Field(..., description="Time taken to generate the summary in milliseconds")
+    tokens_input: Optional[int] = Field(0, description="Number of input tokens")
+    tokens_output: Optional[int] = Field(0, description="Number of output tokens")
 
 class JudgeFeedback(BaseModel):
     """Validation and critique provided by the Judge Agent."""

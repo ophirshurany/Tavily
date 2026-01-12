@@ -53,6 +53,8 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                         if feedback.status == "FAIL":
                             print(f"  [ADVANCED] Judge failed, retrying...")
                             original_latency = summary.latency_ms
+                            original_tokens_input = summary.tokens_input
+                            original_tokens_output = summary.tokens_output
                             summary = await summarizer.async_refine_summary(
                                 content=content, 
                                 strategy=strategy, 
@@ -60,6 +62,9 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                                 original_summary=summary.content
                             )
                             summary.latency_ms += original_latency  # Accumulate latency
+                            # Accumulate tokens from failed attempt
+                            summary.tokens_input = (summary.tokens_input or 0) + (original_tokens_input or 0)
+                            summary.tokens_output = (summary.tokens_output or 0) + (original_tokens_output or 0)
                             feedback = await judge.async_evaluate(summary)
                     else:
                         # For "fast", auto-pass (no Judge call)
@@ -110,10 +115,20 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                     # Scale to 1-10
                     quality_score = round(1 + composite_raw * 9, 1)
 
+                    # Cost Calculation (Gemini 2.0 Flash)
+                    # Input: $0.10 / 1M tokens
+                    # Output: $0.40 / 1M tokens
+                    tokens_in = summary.tokens_input or 0
+                    tokens_out = summary.tokens_output or 0
+                    cost_usd = (tokens_in / 1_000_000 * 0.10) + (tokens_out / 1_000_000 * 0.40)
+                    
                     
                     result = {
                         "url": content.url,
                         "latency_ms": latency_rounded,
+                        "tokens_input": tokens_in,
+                        "tokens_output": tokens_out,
+                        "cost_usd": round(cost_usd, 6),
                         "char_count": summary.char_count,
                         "judge_status": feedback.status,
                         "judge_score": feedback.score_accuracy,
@@ -185,7 +200,7 @@ async def main_async():
 
 def save_results(flat_results, strategies):
     fieldnames = [
-        "url", "latency_ms", "char_count", 
+        "url", "latency_ms", "tokens_input", "tokens_output", "cost_usd", "char_count", 
         "judge_status", "judge_score", "judge_critique",
         "rouge_l_f1", "bert_score_f1", "quality_score",
         "summary_content", "baseline_summary",
