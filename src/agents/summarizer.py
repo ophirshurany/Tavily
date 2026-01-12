@@ -1,7 +1,7 @@
 import time
-from google_adk import LlmAgent
+from src.core.llm_client import LlmAgent
 from src.schema import RawContent, SummaryOutput, JudgeFeedback
-from config import MODEL_NAME, MAX_CONTENT_CHARS
+from config.settings import MODEL_NAME, MAX_CONTENT_CHARS
 
 
 class SummarizerAgent:

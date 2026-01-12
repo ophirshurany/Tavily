@@ -5,12 +5,11 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from google import genai
 from google.genai import types
+from config.settings import MAX_RETRIES, BASE_RETRY_DELAY
+from dotenv import load_dotenv
 
 load_dotenv()
 
-# Retry configuration
-MAX_RETRIES = 5
-BASE_DELAY = 0.5  # seconds
 
 class LlmAgent:
     def __init__(self, model: str = "gemini-2.0-flash", system_prompt: str = "", output_type: Type[BaseModel] = None):
@@ -93,7 +92,7 @@ class LlmAgent:
                 error_str = str(e).lower()
                 if "rate" in error_str or "quota" in error_str or "429" in error_str:
                     if attempt < MAX_RETRIES - 1:
-                        delay = BASE_DELAY * (2 ** attempt)  # Exponential backoff
+                        delay = BASE_RETRY_DELAY * (2 ** attempt)  # Exponential backoff
                         await asyncio.sleep(delay)
                     else:
                         print(f"Rate limit exceeded after {MAX_RETRIES} retries")

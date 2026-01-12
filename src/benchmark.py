@@ -9,11 +9,11 @@ from tqdm import tqdm
 
 # Suppress BERTScore's RoBERTa warnings and use cached model
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["HF_HUB_OFFLINE"] = "1"  # Use cached model, don't hit HuggingFace
+os.environ["HF_HUB_OFFLINE"] = "1"
 import transformers
 transformers.logging.set_verbosity_error()
 
-from config import MAX_CONCURRENT_CALLS, STRATEGIES, DEFAULT_SAMPLE_LIMIT, WEIGHTS, MAX_SUMMARY_CHARS
+from config.settings import MAX_CONCURRENT_CALLS, STRATEGIES, DEFAULT_SAMPLE_LIMIT, WEIGHTS, MAX_SUMMARY_CHARS
 from src.data_loader import DataLoader
 from src.agents.summarizer import SummarizerAgent
 from src.agents.judge import JudgeAgent
@@ -215,7 +215,7 @@ def save_results(flat_results, strategies):
     
     try:
         for strategy in strategies:
-            filename = f"results_{strategy}.csv"
+            filename = f"results/results_{strategy}.csv"
             f = open(filename, "w", newline="", encoding="utf-8")
             w = csv.DictWriter(f, fieldnames=fieldnames)
             w.writeheader()
@@ -233,10 +233,10 @@ def save_results(flat_results, strategies):
 
     print("Combining results into Excel...")
     try:
-        with pd.ExcelWriter("benchmark_results.xlsx") as writer:
+        with pd.ExcelWriter("results/benchmark_results.xlsx") as writer:
             has_data = False
             for strategy in strategies:
-                csv_name = f"results_{strategy}.csv"
+                csv_name = f"results/results_{strategy}.csv"
                 if os.path.exists(csv_name):
                     try:
                         df = pd.read_csv(csv_name)

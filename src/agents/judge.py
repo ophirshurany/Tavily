@@ -1,7 +1,7 @@
 from typing import Tuple
-from google_adk import LlmAgent, LoopAgent
+from src.core.llm_client import LlmAgent, LoopAgent
 from src.schema import SummaryOutput, JudgeFeedback
-from config import MODEL_NAME
+from config.settings import MODEL_NAME
 
 class JudgeAgent:
     def __init__(self, model_name: str = MODEL_NAME):
