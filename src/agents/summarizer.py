@@ -1,6 +1,6 @@
 import time
 from google_adk import LlmAgent
-from src.schema import RawContent, SummaryOutput
+from src.schema import RawContent, SummaryOutput, JudgeFeedback
 from config import MODEL_NAME, MAX_CONTENT_CHARS
 
 
@@ -65,6 +65,62 @@ class SummarizerAgent:
             prompt += "\nUse your advanced chain-of-thought reasoning."
             
         summary_output = await self.agent.async_run(prompt)
+        
+        end_time = time.time()
+        latency_ms = (end_time - start_time) * 1000
+        
+        summary_output.latency_ms = latency_ms
+        summary_output.char_count = len(summary_output.content)
+        summary_output.strategy = strategy
+        
+    async def async_refine_summary(self, content: RawContent, strategy: str, feedback: JudgeFeedback, original_summary: str) -> SummaryOutput:
+        """
+        Refines a summary based on Judge feedback.
+        """
+        start_time = time.time()
+        
+        prompt = (
+            f"Strategy: {strategy.upper()}\n"
+            f"URL: {content.url}\n"
+            f"Title: {content.metadata.get('title', 'N/A')}\n\n"
+            f"Original Content:\n{content.text[:8000]}\n\n"
+            f"PREVIOUS SUMMARY:\n{original_summary}\n\n"
+            f"CRITIQUE (Why it failed):\n{feedback.critique}\n\n"
+            f"INSTRUCTIONS:\n"
+            f"Rewrite the summary to address the critique above. "
+            f"Ensure you still follow the original constraints (max 1500 chars, same language as source)."
+        )
+        
+        summary_output = await self.agent.async_run(prompt)
+        
+        end_time = time.time()
+        latency_ms = (end_time - start_time) * 1000
+        
+        summary_output.latency_ms = latency_ms
+        summary_output.char_count = len(summary_output.content)
+        summary_output.strategy = strategy
+        
+        return summary_output
+
+    def refine_summary(self, content: RawContent, strategy: str, feedback: JudgeFeedback, original_summary: str) -> SummaryOutput:
+        """
+        Refines a summary based on Judge feedback (sync version).
+        """
+        start_time = time.time()
+        
+        prompt = (
+            f"Strategy: {strategy.upper()}\n"
+            f"URL: {content.url}\n"
+            f"Title: {content.metadata.get('title', 'N/A')}\n\n"
+            f"Original Content:\n{content.text[:8000]}\n\n"
+            f"PREVIOUS SUMMARY:\n{original_summary}\n\n"
+            f"CRITIQUE (Why it failed):\n{feedback.critique}\n\n"
+            f"INSTRUCTIONS:\n"
+            f"Rewrite the summary to address the critique above. "
+            f"Ensure you still follow the original constraints (max 1500 chars, same language as source)."
+        )
+        
+        summary_output = self.agent.run(prompt)
         
         end_time = time.time()
         latency_ms = (end_time - start_time) * 1000

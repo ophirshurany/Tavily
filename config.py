@@ -15,7 +15,7 @@ MAX_TPM = 4_000_000 # Tokens per minute
 
 # Concurrent calls - set based on rate limits
 # With 2K RPM, we can safely do ~30 concurrent calls
-MAX_CONCURRENT_CALLS = 30
+MAX_CONCURRENT_CALLS = 50
 
 # =============================================================================
 # Retry Configuration

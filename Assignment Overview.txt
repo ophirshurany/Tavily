@@ -1,43 +1,27 @@
-Assignment Overview
-The document outlines a home assignment for Tavily, whose goal is to provide agents with relevant web information quickly. The system is designed to balance three specific trade-offs: latency, accuracy, and cost.
-
-Task Description
-The objective is to explore different web content summarization strategies while considering the three measurements mentioned above. You are required to develop two distinct strategies:
-
-
-Fast: Characterized by low latency and moderate quality.
-
-
-Advanced: Characterized by moderate latency and high quality.
-
-A dataset consisting of 1,000 URLs, their content, and baseline summaries is provided for this task.
-
+Summary Assignment
+Tavily’s purpose is to provide agents with the most relevant information from the web at speed.
+Our system will always balance among 3 trade-offs - latency, accuracy, and cost. In this
+assignment, you’ll explore different ways of summarizing web content, while keeping in mind the
+three measurements.
+Your task is to create two summarization strategies as follows:
+1. Fast: low latency, moderate quality.
+2. Advanced: moderate latency, high quality.
+You are provided with a dataset of 1k URLs, their corresponding content, and summaries
+produced by a baseline summarization algorithm.
 Deliverables
-The assignment requires two main components:
-
-GitHub Repository (or Notebooks):
-
-Implementation of the summarization strategies.
-
-A benchmark comparison of the approaches using relevant metrics.
-
-One-Pager PDF:
-
-An outline of the research and experimentation process.
-
-Descriptions of the attempted approaches.
-
-A highlight of faced challenges or limitations.
-
-Requirements & Evaluation
-
-Multilingual Support: All approaches must be multilingual.
-
-
-Length Constraint: Summaries must not exceed 1,500 characters.
-
-
-Timeline: The due date is one week from the assignment start.
-
-
-Evaluation Criteria: Performance of the algorithms, justification of chosen metrics, and the feasibility of the solution in a production environment handling millions of daily requests
+1. GitHub repo (can also be notebooks):
+a. Implement the two summarization strategies.
+b. A benchmark comparing the approaches using relevant metrics.
+2. One pager PDF:
+a. Outline your research and experimentation process.
+b. Describe the approaches you tried.
+c. Highlight limitations or challenges you faced.
+Requirements
+1. Approaches must be multilingual.
+2. Summary should not exceed 1.5k chars.
+Evaluation Criteria
+You will be evaluated on:
+1. Algorithms performances.
+2. Choice and justification of evaluation metrics.
+3. Production feasibility (remember Tavily handles millions of requests a day).
+Please use your loaded credit card for all purchases needed.

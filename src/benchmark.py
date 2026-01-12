@@ -49,9 +49,17 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                     if strategy == "advanced":
                         feedback = await judge.async_evaluate(summary)
                         # Simple retry if Judge fails (max 1 retry for speed)
+                        # Simple retry if Judge fails (max 1 retry for speed)
                         if feedback.status == "FAIL":
                             print(f"  [ADVANCED] Judge failed, retrying...")
-                            summary = await summarizer.async_summarize(content, strategy=strategy)
+                            original_latency = summary.latency_ms
+                            summary = await summarizer.async_refine_summary(
+                                content=content, 
+                                strategy=strategy, 
+                                feedback=feedback, 
+                                original_summary=summary.content
+                            )
+                            summary.latency_ms += original_latency  # Accumulate latency
                             feedback = await judge.async_evaluate(summary)
                     else:
                         # For "fast", auto-pass (no Judge call)
@@ -72,7 +80,7 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                         
                         if bert_score:
                             try:
-                                P, R, F1 = bert_score([summary.content], [reference], lang="en", verbose=False)
+                                P, R, F1 = bert_score([summary.content], [reference], lang=None, verbose=False)
                                 bert_f1 = F1.mean().item()
                             except Exception as e:
                                 print(f"BERTScore error: {e}")
