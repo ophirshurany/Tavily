@@ -85,7 +85,7 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                         
                         if bert_score:
                             try:
-                                P, R, F1 = bert_score([summary.content], [reference], lang=None, verbose=False)
+                                P, R, F1 = bert_score([summary.content], [reference], lang="en", verbose=False)
                                 bert_f1 = F1.mean().item()
                             except Exception as e:
                                 print(f"BERTScore error: {e}")
@@ -243,8 +243,15 @@ def save_results(flat_results, strategies):
                         if not df.empty:
                             df.to_excel(writer, sheet_name=strategy, index=False)
                             has_data = True
+                        else:
+                            print(f"Warning: {csv_name} is empty.")
                     except Exception as e:
-                        print(f"Error reading {csv_name}: {e}")
+                        print(f"Error reading/writing {csv_name}: {e}")
+
+            if not has_data:
+                # Create a dummy sheet if no data to prevent ExcelWriter error
+                pd.DataFrame({'Info': ['No results generated']}).to_excel(writer, sheet_name='No Data', index=False)
+
             
         if has_data:
             print("Success! Created 'benchmark_results.xlsx'.")

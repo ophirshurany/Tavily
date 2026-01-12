@@ -73,6 +73,7 @@ class SummarizerAgent:
         summary_output.char_count = len(summary_output.content)
         summary_output.strategy = strategy
         
+        return summary_output
     async def async_refine_summary(self, content: RawContent, strategy: str, feedback: JudgeFeedback, original_summary: str) -> SummaryOutput:
         """
         Refines a summary based on Judge feedback.

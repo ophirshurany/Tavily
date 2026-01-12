@@ -5,23 +5,24 @@ Centralized configuration for Tavily Summarization Benchmark.
 # =============================================================================
 # Model Configuration
 # =============================================================================
-MODEL_NAME = "gemini-2.0-flash"  # Stable version with 2K RPM
+MODEL_NAME = "gemini-2.0-flash"
 
 # =============================================================================
-# Rate Limiting (Gemini 2.0 Flash Tier 1)
+# Rate Limiting (Optimized for Stability)
 # =============================================================================
-MAX_RPM = 2000      # Requests per minute
-MAX_TPM = 4_000_000 # Tokens per minute
+# We use 80% of actual limits to create a safety buffer
+MAX_RPM = 1600      # Actual limit 2000
+MAX_TPM = 3_200_000 # Actual limit 4,000,000
 
-# Concurrent calls - set based on rate limits
-# With 2K RPM, we can safely do ~30 concurrent calls
-MAX_CONCURRENT_CALLS = 50
+# Lowering concurrency prevents "bursting" past the TPM limit
+MAX_CONCURRENT_CALLS = 15 
 
 # =============================================================================
-# Retry Configuration
+# Retry Configuration (More patient backoff)
 # =============================================================================
 MAX_RETRIES = 5
-BASE_RETRY_DELAY = 0.5  # seconds (exponential backoff: 0.5, 1, 2, 4, 8s)
+# Starting at 2s gives the 60-second rolling window time to recover
+BASE_RETRY_DELAY = 2.0
 
 # =============================================================================
 # Benchmark Defaults
