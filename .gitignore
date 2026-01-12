@@ -1,0 +1,24 @@
+# Credentials and Environment
+.env
+
+# Data and Artifacts (Large files)
+data/*.json
+*.csv
+*.xlsx
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+dist/
+build/
+.venv/
+env/
+venv/
+.pytest_cache/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
