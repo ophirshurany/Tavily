@@ -139,7 +139,8 @@ async def process_sample(i, content, summarizer, judge, strategies, r_scorer):
                         "summary_content": summary.content,
                         "baseline_summary": reference,
                         "baseline_char_count": len(reference),
-                        "strategy": strategy
+                        "strategy": strategy,
+                        "language": summary.language or "unknown"
                     }
                     results.append(result)
                     
@@ -200,7 +201,7 @@ async def main_async():
 
 def save_results(flat_results, strategies):
     fieldnames = [
-        "url", "latency_ms", "tokens_input", "tokens_output", "cost_usd", "char_count", 
+        "url", "language", "latency_ms", "tokens_input", "tokens_output", "cost_usd", "char_count", 
         "judge_status", "judge_score", "judge_critique",
         "rouge_l_f1", "bert_score_f1", "quality_score",
         "summary_content", "baseline_summary",

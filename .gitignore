@@ -4,7 +4,6 @@
 # Data and Artifacts (Large files)
 data/*.json
 *.csv
-*.xlsx
 
 # Python artifacts
 __pycache__/

@@ -32,6 +32,7 @@ Adapt your approach based on the strategy requested:
 
 Return a `SummaryOutput` object with:
 - `content`: The summary text (max 1500 chars)
+- `language`: Detected ISO 639-1 language code (e.g., 'en', 'he')
 - `strategy`: The strategy used ("fast" or "advanced")
 - `char_count`: Length of the summary
 - `latency_ms`: Time taken (will be overwritten by system)

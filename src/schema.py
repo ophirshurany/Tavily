@@ -22,6 +22,7 @@ class SummaryOutput(BaseModel):
     latency_ms: float = Field(..., description="Time taken to generate the summary in milliseconds")
     tokens_input: Optional[int] = Field(0, description="Number of input tokens")
     tokens_output: Optional[int] = Field(0, description="Number of output tokens")
+    language: Optional[str] = Field("unknown", description="ISO 639-1 language code detected from content")
 
 class JudgeFeedback(BaseModel):
     """Validation and critique provided by the Judge Agent."""
